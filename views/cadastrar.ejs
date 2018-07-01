@@ -1,0 +1,67 @@
+<% include partials/header %>
+    <% if (message.length > 0) { %>
+		<div class="btn btn-large"><%= message %></div>
+	<% } %>
+    <h3>Informações Pessoais</h3>
+        <form class="col s12" action="/cadastrar" method="POST">
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="first_name" type="text" name="username" class="validate">
+              <label for="first_name">Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <input id="password" type="password" name="password" class="validate">
+              <label for="password">Password</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <input id="email" type="email" name="email" class="validate">
+              <label for="email">Email</label>
+            </div>
+          </div>
+          <h3>Endereço</h3>
+          <div class="row">
+              <div class="input-field col s12 m6">
+                    <input id="rua" type="text" name="rua" class="validate">
+                    <label for="rua">Rua</label>
+              </div>
+            </div>
+          <div class="row">
+              <div class="input-field col s12 m6">
+                    <input id="estado" type="text" name="estado" class="validate">
+                    <label for="estado">Estado</label>
+              </div>
+          </div>
+           <div class="row">
+              <div class="input-field col s12 m6">
+                    <input id="cidade" type="text" name="cidade" class="validate">
+                    <label for="cidade">Cidade</label>
+              </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6">
+              <input id="bairro" type="text" name="bairro" class="validate">
+              <label for="bairro">Bairro</label>
+            </div>
+          </div>    
+          <div class="row">
+                <div class="input-field col s2">
+                      <input id="numero" type="text" name="numero" class="validate">
+                      <label for="numero">Numero</label>
+                </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s4">
+              <input id="log" type="text" name="logradouro" class="validate">
+              <label for="log">Logradouro</label>
+             </div>
+          </div>
+          <button type="submit" class="btn btn-large white-text blue darken-4 waves-effect waves-light" style="margin: 50px;">Cadastrar</button>
+        </form>
+      </div>
+      <p>Already have an account? <a href="/login">Login</a></p>
+	    <p>Or go <a href="/">home</a>.</p>
+    <% include partials/footer %>

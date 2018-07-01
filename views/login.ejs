@@ -1,0 +1,26 @@
+<% include partials/header %>    
+                <div class="valign-wrapper row login-box">
+                    <div class="col card hoverable s10 pull-s1 m6 pull-m3 l4 pull-l4">
+                      <form action="/login" method="POST">
+                        <div class="card-content">
+                          <span class="card-title">Login</span>
+                          <div class="row">
+                            <div class="input-field col s12">
+                              <label for="email">Login</label>
+                              <input type="email" class="validate" name="email" id="email" />
+                            </div>
+                            <div class="input-field col s12">
+                              <label for="password">Password </label>
+                              <input type="password" class="validate" name="password" id="password" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-action right-align">
+                          <a href="/cadastrar" class="btn-flat grey-text waves-effect">Sem conta?</a>
+                          <input type="reset" id="reset" class="btn-flat grey-text waves-effect">
+                          <input type="submit" id="login" class="btn white-text blue darken-4 waves-effect waves-light " value="Login">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+<% include partials/footer %>

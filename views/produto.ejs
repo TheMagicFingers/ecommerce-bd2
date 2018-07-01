@@ -1,0 +1,13 @@
+<% include partials/header %>
+    <div class="col m12 m9" style="margin: 70px 0;">
+        <img src="<%= produto[0].url_img %>" class="img-responsive z-depth-3"alt="Produto"> 
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>Informações</h4></li>
+        <li class="collection-item"> <%= produto[0].descricao %></li>
+        <li class="collection-item">Preço: <%= produto[0].preco_unit %></li>
+        <li class="collection-item">Quantidade em Estoque: <%= produto[0].qtd_est %> </li>
+      </ul>
+        <a href="/carrinho" class="btn blue darken-4 z-depth-4 waves-effect waves-light" style="text-align : center; margin-top: 15px;"> <i class="material-icons icones">add</i>Adicionar ao Carrinho</a>
+        
+    </div>
+<% include partials/footer %>

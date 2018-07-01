@@ -1,0 +1,35 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    height: 100%;
+  }
+main {
+    flex: 1 0 auto;
+  }
+#listaProdutos{
+  display : flex;
+  flex-wrap :wrap;
+}  
+.card img {
+    max-height: 200px;
+    object-fit: cover;
+}
+.login-box{
+  margin-top: 50px;
+  height: 100%;
+}
+.card img.materialized.active {
+    max-height: none;
+    object-fit: none;
+}
+.icones{
+  display: inline !important;
+  vertical-align: bottom !important;
+}
+#login{
+  color:white;
+}
+.produtopage{
+  margin: 70px 0;
+}
