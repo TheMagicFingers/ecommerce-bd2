@@ -1,40 +1,35 @@
-<!-- views/profile.ejs -->
-<!doctype html>
-<html>
-<head>
-	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-	<style>
-		body 		{ padding-top:80px; word-wrap:break-word; }
-	</style>
-</head>
-<body>
-<div class="container">
+<% include partials/header %>
+    <div id="userProfile">
+        <div class="container center">
+            <h4>Informações do Usuário</h4>
+            <div class="row">
+                    <div class="col s12 m12 card">
+                        <h5>Nome: <%= currentUser.nome_user %></h5>
+                        <h5>Email: <%= currentUser.email_user %></h5>
+                    </div>
+            </div>
+            <div class="divider"></div>
+            <form action="/totalNotas" method="post">
+                <input type="hidden" name="id" value="<%= currentUser.id_cliente %>">
+                <button class="btn btn-large" style="margin-top: 70px;">clique aqui para ver todas as suas compras</button>
+            </form>
+            <%if(currentUser.email_user === 'admin@gmail.com'){ %>
+                <div class="row" style="margin-top: 80px;">
+                    <div class="col s12 m4">
+                        <a class="btn btn-large green darken-4" style="" href="">Novo produto </a>
+                    </div>
+                    <div class="col s12 m4">
+                        <a class="btn btn-large red darken-4"href="">Deletar produto</a>
+                    </div>
+                    <div class="col s12 m4">    
+                        <a class="btn btn-large red darken-4"href="">Adicionar Qtd no Estoque</a>
+                     </div>
+                      
+                        
+                </div>
+                
+            <% }%>
 
-	<div class="page-header text-center">
-		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
-	</div>
-
-	<div class="row">
-
-		<!-- LOCAL INFORMATION -->
-		<div class="col-sm-6">
-			<div class="well">
-				<h3><span class="fa fa-user"></span> Local</h3>
-
-					<p>
-						<strong>id</strong>: <%= user.id %><br>
-						<strong>username</strong>: <%= user.username %><br>
-						<strong>password</strong>: <%= user.password %>
-					</p>
-
-			</div>
-		</div>
-
-	</div>
-
-</div>
-</body>
-</html>
+        </div>   
+    </div>
+<% include partials/footer %>

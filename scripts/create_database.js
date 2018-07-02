@@ -32,11 +32,10 @@ connection.query('\
 connection.query('\
     CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.notas_table + '` ( \
       `id_notas` INT NOT NULL AUTO_INCREMENT,\
+      `id_cliente` INT NOT NULL,\
       `data_compra` DATE NOT NULL,\
-      `preco_unit` DECIMAL(5,2) NOT NULL,\
-      `qtd_est` INT NOT NULL,\
-      `url_img` VARCHAR(255) NOT NULL,\
-       PRIMARY KEY (`id_notas`) \
+       PRIMARY KEY (`id_notas`,`id_cliente`), \
+       foreign key (`id_cliente`) references `clientes`(`id_cliente`)\
     )' );
 //Tabela de Endereco
 connection.query('\
@@ -44,7 +43,7 @@ CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.endereco_table + '` ( \
   `id_cliente` INT NOT NULL,\
   `rua` varchar(45) NOT NULL,\
   `logradouro` varchar(45) NOT NULL,\
-  `numero` INT NOT NULL,\
+  `numero` varchar(45) NOT NULL,\
   `cidade` varchar(45) NOT NULL,\
   `bairro` varchar(45) NOT NULL,\
   `estado` varchar(45) NOT NULL,\
@@ -61,48 +60,67 @@ CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.itens_nota_table + '` ( \
    foreign key (`id_notas`) references `notas`(`id_notas`)\
 )' );
 //Views
-
+ connection.query(`
+  CREATE VIEW ${dbconfig.database}.Gastos_Clientes AS \
+  SELECT c.nome, SUM(p.preco*t.qtde) AS total_gasto
+  FROM clientes c INNER JOIN notas n ON c.id_cliente = n.id_cliente 
+  INNER JOIN itens_nota t ON t.id_notas = n.id_notas
+  INNER JOIN produtos p ON p.id_produtos = t.id_produtos 
+  WHERE c.cliente_id = n.id_cliente 
+)`);
 //Functions
 
 //Procedures
+//Insere usuario
 connection.query(' \
-CREATE  PROCEDURE `insert_user`(in nome varchar(45),in senha varchar(255),in email varchar(45), in ruav varchar(45),in cidadev varchar(45), \
+CREATE  PROCEDURE `' + dbconfig.database + '`.`insert_user`(in nome varchar(45),in senha varchar(255),in email varchar(45), in ruav varchar(45),in cidadev varchar(45), \
 		in logradourov varchar(45), in numerov varchar(45), in bairrov varchar(45), in estadov varchar(45))\
 BEGIN\
 			declare id int;\
 			insert into `clientes`(`nome_user`,`senha_user`,`email_user`) values (nome,senha,email); \
       select last_insert_id() into id;\
       select id;\
-      insert into endereco(`id_cliente`,`rua`,`logradouro`,`numero`,`cidade`,`bairro`,`estado`) values (id,ruav,cidadev,logradourov,numerov,bairrov,estadov);\
+      insert into endereco(`id_cliente`,`rua`,`logradouro`,`numero`,`cidade`,`bairro`,`estado`) values (id,ruav,logradourov,numerov,cidadev,bairrov,estadov);\
 END \
 ');
+//procedure fazer venda
+connection.query(`
+DELIMITER $$
+CREATE PROCEDURE ${dbconfig.database}.insert_nota(in id_clientev int,in id_produtosv int,in qtd_compra int)
+BEGIN
+		declare id int;
+		insert into notas(id_cliente,data_compra) values (id_clientev,curdate());
+		select last_insert_id() into id;
+		select id;
+    insert into itens_nota(qtd,id_produtos,id_notas) values (qtd_compra,id_produtosv,id);
+END $$
+DELIMITER ;`);
+//retorna todas as notas de um cliente
+connection.query(`
+DELIMITER $$
+CREATE procedure ${dbconfig.database}.notas(in id INT)
+BEGIN
+		SELECT  p.descricao, t.qtd, p.preco_unit
+    	FROM clientes c INNER JOIN notas n ON n.id_cliente = c.id_cliente
+    	INNER JOIN itens_nota t ON t.id_notas = n.id_notas
+    	INNER JOIN produtos p ON p.id_produtos = t.id_produtos
+        where c.id_cliente = id;
+END $$
+DELIMITER ;
+`)
 //Triggers
-
-//Seed for DB
-// for(let i = 0 ; i < 20 ; i++){    
-//     // Insere 20 Usuarios - Senha padrão 123
-//     connection.query(`insert into clientes(nome_user,email_user,senha_user) values (
-//         ${faker.fake("'{{name.findName}}','{{internet.email}}','123'")}
-//     )`,(err,result) => {
-//         if (err) throw err
-//         console.log("seeded 20 users!!!")
-//     })
-//     // Insere 20 produtos
-//     connection.query(`insert into produtos(descricao,preco_unit,qtd_est,url_img) values (
-//         ${faker.fake("'{{commerce.productName}}','{{commerce.price}}',42,'https://tudoela.com/wp-content/uploads/2016/08/beneficios-da-melancia-810x540.jpg'")}
-//     )`,(err,result) => {
-//         if (err) throw err
-//         console.log("seeded 20 users!!!")
-//     })
-//     //Insere vinte notas
-//     connection.query(`insert into produtos(descricao,preco_unit,qtd_est,url_img) values (
-//         ${faker.fake("'{{commerce.productName}}','{{commerce.price}}',42,'https://tudoela.com/wp-content/uploads/2016/08/beneficios-da-melancia-810x540.jpg'")}
-//     )`,(err,result) => {
-//         if (err) throw err
-//         console.log("seeded 20 users!!!")
-//     })
-
-// }
+connection.query(`
+  DELIMITER $
+  CREATE TRIGGER ${dbconfig.database}.Trg_atualiza_estoque AFTER INSERT
+  ON itens_nota
+  FOR EACH ROW
+  BEGIN
+    UPDATE produtos
+        SET qtd_est = qtd_est - 1
+        WHERE new.id_produtos = produtos.id_produtos;
+  END $
+  DELIMITER ;
+`);
 
 console.log('Success: Database Created!')
 

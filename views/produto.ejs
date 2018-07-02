@@ -7,7 +7,26 @@
         <li class="collection-item">Preço: <%= produto[0].preco_unit %></li>
         <li class="collection-item">Quantidade em Estoque: <%= produto[0].qtd_est %> </li>
       </ul>
-        <a href="/carrinho" class="btn blue darken-4 z-depth-4 waves-effect waves-light" style="text-align : center; margin-top: 15px;"> <i class="material-icons icones">add</i>Adicionar ao Carrinho</a>
-        
+      <% console.log(currentUser) %>
+        <% if(!currentUser) { %>
+          <a class="btn red darken-4 z-depth-4 waves-effect waves-light" style="text-align : center; margin-top: 15px;">
+            Por favor logar para finalizar a compra
+           </a>  
+
+        <% } else { %>
+        <form id="formi" action="/checkout" method="post">
+          <!-- Gambiarra de leve-->
+          <input type="hidden" name="id_produtos" value="<%= produto[0].id_produtos %>"> 
+          <input type="hidden" name="descricao" value="<%= produto[0].descricao %>"> 
+          <input type="hidden" name="preco_unit" value="<%= produto[0].preco_unit %>"> 
+          <input type="hidden" name="id_cliente" value="<%= currentUser.id_cliente %>"> 
+          <input type="hidden" name="url_img" value="<%= produto[0].url_img %>"> 
+      
+          <a class="btn blue darken-4 z-depth-4 waves-effect waves-light" style="text-align : center; margin-top: 15px;"
+          onclick="document.getElementById('formi').submit()" >  
+          <i class="material-icons icones">add</i>Comprar</a>
+        </form>
+       
+        <% } %>
     </div>
 <% include partials/footer %>

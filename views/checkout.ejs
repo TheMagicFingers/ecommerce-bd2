@@ -1,0 +1,21 @@
+<% include partials/header %>    
+
+        <form action="/finalizar" method="post">
+          <!-- Gambiarra de leve-->
+          <input type="hidden" name="id_produtos" value="<%= compra.id_produtos %>"> 
+          <input type="hidden" name="descricao" value="<%= compra.descricao %>"> 
+          <input type="hidden" name="preco_unit" value="<%= compra.preco_unit %>"> 
+          <input type="hidden" name="id_cliente" value="<%= currentUser.id_cliente %>"> 
+          <input type="hidden" name="url_img" value="<%= compra.url_img %>"> 
+
+            <ul class="collection">
+                <li class="collection-item">Produto: <%= compra.descricao %></li>
+                <li class="collection-item">Preço: <%= compra.preco_unit %></li>
+                <li class="collection-item">Quantidade : <input type="number" name="qtd_compra" value="1"> </li>
+            </ul>
+         
+          <button type="submit" class="btn btn-large"> <i class="material-icons icones">add</i>Finalizar Compra</a></button>
+        </form>
+
+         
+<% include partials/footer %>

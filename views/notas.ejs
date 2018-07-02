@@ -1,0 +1,15 @@
+<% include partials/header %>    
+        <%= console.log(nota[0][0].preco_unit) %>
+        <ul class="collection with-header">
+        <li class="collection-header"><h4>Notas</h4></li>
+       <% for(let i = 0 ; i < nota[0].length ; i++){ %>
+        <div class="divider"></div>
+            <li class="collection-item">Produto: <%= nota[0][i].descricao %></li>
+            <li class="collection-item">Preço unitário: <%= nota[0][i].preco_unit %></li>
+            <li class="collection-item">Quantidade: <%= nota[0][i].qtd %> </li>
+            <li class="collection-item">Total: <%= nota[0][i].qtd * nota[0][i].preco_unit %> </li>
+            <li class="collection-item">Data: <%= nota[0][i].data_compra %> </li>
+         <% } %>
+
+      </ul>
+<% include partials/footer %>
