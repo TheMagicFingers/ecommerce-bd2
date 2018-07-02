@@ -1,7 +1,3 @@
-/**
- * Created by barrett on 8/28/14.
- */
-
 var mysql = require('mysql');
 var dbconfig = require('../config/database');
 const faker = require('faker')
@@ -60,14 +56,14 @@ CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.itens_nota_table + '` ( \
    foreign key (`id_notas`) references `notas`(`id_notas`)\
 )' );
 //Views
- connection.query(`
-  CREATE VIEW ${dbconfig.database}.Gastos_Clientes AS \
-  SELECT c.nome, SUM(p.preco*t.qtde) AS total_gasto
-  FROM clientes c INNER JOIN notas n ON c.id_cliente = n.id_cliente 
-  INNER JOIN itens_nota t ON t.id_notas = n.id_notas
-  INNER JOIN produtos p ON p.id_produtos = t.id_produtos 
-  WHERE c.cliente_id = n.id_cliente 
-)`);
+//  connection.query(`
+//   CREATE VIEW ${dbconfig.database}.Gastos_Clientes AS \
+//   SELECT c.nome, SUM(p.preco*t.qtde) AS total_gasto
+//   FROM clientes c INNER JOIN notas n ON c.id_cliente = n.id_cliente 
+//   INNER JOIN itens_nota t ON t.id_notas = n.id_notas
+//   INNER JOIN produtos p ON p.id_produtos = t.id_produtos 
+//   WHERE c.cliente_id = n.id_cliente 
+// )`);
 //Functions
 
 //Procedures
@@ -85,7 +81,7 @@ END \
 ');
 //procedure fazer venda
 connection.query(`
-DELIMITER $$
+
 CREATE PROCEDURE ${dbconfig.database}.insert_nota(in id_clientev int,in id_produtosv int,in qtd_compra int)
 BEGIN
 		declare id int;
@@ -93,11 +89,10 @@ BEGIN
 		select last_insert_id() into id;
 		select id;
     insert into itens_nota(qtd,id_produtos,id_notas) values (qtd_compra,id_produtosv,id);
-END $$
-DELIMITER ;`);
+END 
+`);
 //retorna todas as notas de um cliente
 connection.query(`
-DELIMITER $$
 CREATE procedure ${dbconfig.database}.notas(in id INT)
 BEGIN
 		SELECT  p.descricao, t.qtd, p.preco_unit
@@ -105,22 +100,21 @@ BEGIN
     	INNER JOIN itens_nota t ON t.id_notas = n.id_notas
     	INNER JOIN produtos p ON p.id_produtos = t.id_produtos
         where c.id_cliente = id;
-END $$
-DELIMITER ;
+END
 `)
 //Triggers
-connection.query(`
-  DELIMITER $
-  CREATE TRIGGER ${dbconfig.database}.Trg_atualiza_estoque AFTER INSERT
-  ON itens_nota
-  FOR EACH ROW
-  BEGIN
-    UPDATE produtos
-        SET qtd_est = qtd_est - 1
-        WHERE new.id_produtos = produtos.id_produtos;
-  END $
-  DELIMITER ;
-`);
+// connection.query(`
+//   DELIMITER $
+//   CREATE TRIGGER ${dbconfig.database}.Trg_atualiza_estoque AFTER INSERT
+//   ON itens_nota
+//   FOR EACH ROW
+//   BEGIN
+//     UPDATE produtos
+//         SET qtd_est = qtd_est - 1
+//         WHERE new.id_produtos = produtos.id_produtos;
+//   END $
+//   DELIMITER ;
+// `);
 
 console.log('Success: Database Created!')
 
