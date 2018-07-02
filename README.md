@@ -8,3 +8,4 @@
 1. Launch: `npm start`
 1. Visit in your browser at: `http://localhost:8080`
 1. For admin priveleges create user: admin@gmail.com
+1. Views e triggers não consegui por pra rodar via o script entao copia e cola lá no bd
