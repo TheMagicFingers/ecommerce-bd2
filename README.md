@@ -1,7 +1,8 @@
 ## Instructions
 
+Necessary: Node.js
 
-1. Clone the repo: `git clone git@github.com:manjeshpv/node-express-passport-mysql.git`
+1. Download Repository
 1. Install packages: `npm install`
 1. Edit the database configuration: `config/database.js`
 1. Create the database schema: `node scripts/create_database.js`
